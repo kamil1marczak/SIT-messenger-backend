@@ -1,0 +1,155 @@
+version: '3.7'
+
+services:
+
+#  nginx:
+#    build: ./compose/local/nginx
+#    ports:
+#      - 8090:8090
+#      - 5555:5555
+#      - 15672:15672
+#    depends_on:
+#      - web
+#      - flower
+##      - frontend
+
+#
+#  frontend:
+#    image: sit_core_frontend
+#    build: ./frontend
+##    volumes:
+##      - ./frontend/:/user/src/app/
+##    expose:
+##      - 3000
+##    ports:
+##      - 3000:3000
+#    depends_on:
+#      - web
+#    command: ./start-dev
+#    env_file:
+#      - .env/dev.env
+
+  web:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: sit_core_web
+    # this is shell script run the service
+    command: /start
+    # so if we change code on host, code in docker container would also be changed
+    volumes:
+      - .:/app
+#      - staticfiles:/app/staticfiles
+#      - mediafiles:/app/mediafiles
+    # this is the Django dev server default number
+    ports:
+      - 8000:8000
+    # we use this file to manage env variables of our project
+    env_file:
+      - .env/dev.env
+    depends_on:
+      - redis
+      - db
+
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=hello_django_dev
+      - POSTGRES_USER=hello_django
+      - POSTGRES_PASSWORD=hello_django
+
+#  pgadmin:
+#    container_name: pgadmin4_container
+#    image: dpage/pgadmin4
+#    restart: always
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: hello_django
+#    ports:
+#      - "5050:80"
+
+  redis:
+    image: redis:5-alpine
+
+#  rabbitmq:
+#    image: rabbitmq:3-management
+#    env_file:
+#      - .env/prod.env
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: sit_core_celery_worker
+    command: /start-celeryworker
+    volumes:
+      - .:/app
+    env_file:
+      - .env/dev.env
+    depends_on:
+      - redis
+      - db
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: sit_core_celery_beat
+    command: /start-celerybeat
+    volumes:
+      - .:/app
+    env_file:
+      - .env/dev.env
+    depends_on:
+      - redis
+      - db
+
+  flower:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: sit_core_celey_flower
+    command: /start-flower
+    volumes:
+      - .:/app
+    env_file:
+      - .env/dev.env
+    ports:
+      - 5555:5555
+    depends_on:
+      - redis
+      - db
+
+#  grafana:
+#    image: grafana/grafana:7.2.0
+#    env_file:
+#      - .env/dev.env
+
+
+#  prometheus:
+#    image: prom/prometheus
+#    ports:
+#      - 9090:9090
+#    command:
+#      - --config.file=/etc/prometheus/prometheus.yml
+#    volumes:
+#      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+#    depends_on:
+#      - cadvisor
+#
+#  cadvisor:
+#    image: google/cadvisor
+#    container_name: cadvisor
+#    volumes:
+#      - /:/rootfs:ro
+#      - /var/run:/var/run:rw
+#      - /sys:/sys:ro
+#      - /var/lib/docker/:/var/lib/docker:ro
+
+
+volumes:
+  postgres_data:
+#  staticfiles:
+#  mediafiles:

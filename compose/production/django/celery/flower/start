@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+
+worker_ready() {
+    celery -A sit_core inspect ping
+}
+
+until worker_ready; do
+  >&2 echo 'Celery workers not available'
+  sleep 1
+done
+>&2 echo 'Celery workers is available'
+
+exec celery flower \
+    --app=sit_core \
+    --broker="${CELERY_BROKER}" \
+    --basic_auth="${CELERY_FLOWER_USER}:${CELERY_FLOWER_PASSWORD}" \
+    --url_prefix=flower
+
+# If you want to make flower keeps the task info after restart, pass options like this --persistent=1 --db=flower.db
+# You should also create docker volume to keep db file

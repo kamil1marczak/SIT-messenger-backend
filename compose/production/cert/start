@@ -1,0 +1,5 @@
+#!/bin/bash
+
+certbot certonly -m kamil1marczak@gmail.com --force-interactive --no-eff-email --agree-tos --dns-digitalocean --dns-digitalocean-credentials certbot-creds.ini --dns-digitalocean-propagation-seconds 20 -d api.sit-messenger.com -d www.api.sit-messenger.com
+certbot certonly -m kamil1marczak@gmail.com --force-interactive --no-eff-email --agree-tos --dns-digitalocean --dns-digitalocean-credentials certbot-creds.ini -d \*.sit-messenger.com
+

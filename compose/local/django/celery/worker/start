@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+
+# https://www.accordbox.com/blog/how-auto-reload-celery-worker-code-change/
+celery -A sit_core worker -l INFO

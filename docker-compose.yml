@@ -1,0 +1,159 @@
+version: '3.7'
+
+services:
+
+  nginx:
+    image: nginx:1.15-alpine
+    restart: unless-stopped
+    volumes:
+      - ./data/nginx/conf_ssl.d:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+      - staticfiles:/app/staticfiles
+      - mediafiles:/app/mediafiles
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    ports:
+      - 80:80
+      - 443:443
+      - 5555:5555
+      - 15672:15672
+    depends_on:
+      - web
+      - flower
+#      - frontend
+
+  certbot:
+    image: certbot/dns-digitalocean
+    restart: unless-stopped
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 5d & wait $${!}; done;'"
+
+#  cert:
+#    build:
+#      context: .
+#      dockerfile: ./compose/production/cert/Dockerfile
+#    restart: unless-stopped
+#    volumes:
+#      - ./data/certbot/conf:/etc/letsencrypt
+#      - ./data/certbot/www:/var/www/certbot
+#    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 5d & wait $${!}; done;'"
+#    entrypoint: "/bin/sh -c 'certbot certonly -m kamil1marczak@gmail.com --force-interactive --expand --no-eff-email --agree-tos --dns-digitalocean --dns-digitalocean-credentials certbot-creds.ini --dns-digitalocean-propagation-seconds 20 -d api.sit-messenger.com -d www.api.sit-messenger.com;'"
+
+#  frontend:
+#    image: sit_core_frontend
+#    build: ./frontend
+#    #    volumes:
+#    #      - ./frontend/:/user/src/app/
+#    #    expose:
+#    #      - 3000
+#    #    ports:
+#    #      - 3000:3000
+#    depends_on:
+#      - web
+#    command: ./start-dev
+#    env_file:
+#      - .env/prod.env
+
+
+  web:
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+    command: /start
+    volumes:
+      - staticfiles:/app/staticfiles
+      - mediafiles:/app/mediafiles
+    env_file:
+      - .env/prod.env
+    depends_on:
+      - redis
+      - db
+
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=hello_django_dev
+      - POSTGRES_USER=hello_django
+      - POSTGRES_PASSWORD=hello_django
+
+  redis:
+    image: redis:5-alpine
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    env_file:
+      - .env/prod.env
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+    image: sit_core_celery_worker
+    command: /start-celeryworker
+    volumes:
+      - staticfiles:/app/staticfiles
+      - mediafiles:/app/mediafiles
+    env_file:
+      - .env/prod.env
+    depends_on:
+      - redis
+      - db
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+    image: sit_core_celery_beat
+    command: /start-celerybeat
+    volumes:
+      - staticfiles:/app/staticfiles
+      - mediafiles:/app/mediafiles
+    env_file:
+      - .env/prod.env
+    depends_on:
+      - redis
+      - db
+
+  flower:
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+    image: sit_core_celey_flower
+    command: /start-flower
+    volumes:
+      - staticfiles:/app/staticfiles
+      - mediafiles:/app/mediafiles
+    env_file:
+      - .env/prod.env
+    depends_on:
+      - redis
+      - db
+
+#  prometheus:
+#    image: prom/prometheus
+#    ports:
+#      - 9090:9090
+#    command:
+#      - --config.file=/etc/prometheus/prometheus.yml
+#    volumes:
+#      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+#    depends_on:
+#      - cadvisor
+#
+#  cadvisor:
+#    image: google/cadvisor
+#    container_name: cadvisor
+#    volumes:
+#      - /:/rootfs:ro
+#      - /var/run:/var/run:rw
+#      - /sys:/sys:ro
+#      - /var/lib/docker/:/var/lib/docker:ro
+
+volumes:
+  postgres_data:
+  staticfiles:
+  mediafiles:
