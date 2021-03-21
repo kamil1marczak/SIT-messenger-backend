@@ -4,7 +4,6 @@
 ![Website](https://img.shields.io/website?down_color=lightgrey&down_message=offline&up_color=blue&up_message=online&url=http%3A%2F%2Fsit-messenger.com%2F)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f3575e4a26896cdc9720/maintainability)](https://codeclimate.com/github/kamil1marczak/SIT-messenger-backend/maintainability)
 ![GitHub Release Date](https://img.shields.io/github/release-date/kamil1marczak/SIT-messenger-backend)
-[![CC-0 license](https://img.shields.io/badge/License-CC--0-blue.svg)](https://creativecommons.org/licenses/by-nd/4.0)
 
 
 ![alt text](sit-logo.png "Title" )
