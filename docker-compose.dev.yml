@@ -34,17 +34,11 @@ services:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
     image: sit_core_web
-    # this is shell script run the service
     command: /start
-    # so if we change code on host, code in docker container would also be changed
     volumes:
       - .:/app
-#      - staticfiles:/app/staticfiles
-#      - mediafiles:/app/mediafiles
-    # this is the Django dev server default number
     ports:
       - 8000:8000
-    # we use this file to manage env variables of our project
     env_file:
       - .env/dev.env
     depends_on:

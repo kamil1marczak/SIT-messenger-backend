@@ -20,7 +20,6 @@ services:
     depends_on:
       - web
       - flower
-#      - frontend
 
   certbot:
     image: certbot/dns-digitalocean
@@ -29,32 +28,6 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 5d & wait $${!}; done;'"
-
-#  cert:
-#    build:
-#      context: .
-#      dockerfile: ./compose/production/cert/Dockerfile
-#    restart: unless-stopped
-#    volumes:
-#      - ./data/certbot/conf:/etc/letsencrypt
-#      - ./data/certbot/www:/var/www/certbot
-#    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 5d & wait $${!}; done;'"
-#    entrypoint: "/bin/sh -c 'certbot certonly -m kamil1marczak@gmail.com --force-interactive --expand --no-eff-email --agree-tos --dns-digitalocean --dns-digitalocean-credentials certbot-creds.ini --dns-digitalocean-propagation-seconds 20 -d api.sit-messenger.com -d www.api.sit-messenger.com;'"
-
-#  frontend:
-#    image: sit_core_frontend
-#    build: ./frontend
-#    #    volumes:
-#    #      - ./frontend/:/user/src/app/
-#    #    expose:
-#    #      - 3000
-#    #    ports:
-#    #      - 3000:3000
-#    depends_on:
-#      - web
-#    command: ./start-dev
-#    env_file:
-#      - .env/prod.env
 
 
   web:

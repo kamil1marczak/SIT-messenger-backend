@@ -1,48 +1,87 @@
 
-sudo docker-compose exec web python manage.py initial_deployment
 
-sudo docker-compose exec web python manage.py shell_plus --ipython
-sudo docker-compose exec web python manage.py createsuperuser
-sudo docker-compose exec web python manage.py generateschema --file openapi-schema.yml
-sudo docker-compose exec web python manage.py export route_registered_with_the_router
+![alt text](sit-logo.png "Title" )
 
-**ipython shell** <br>
-sudo docker-compose exec web python manage.py shell
+# SIT messenger - backend
 
+> SIT Messenger is a fully encrypted chat application. SIT Messenger Frontend is Nuxt.js web client for backend Django Rest API service.
 
-sudo docker-compose exec web sh
+### 🏠 [Homepage](https://sit-messenger.com/)
 
-**clear data** <br>
-sudo docker system prune -a
-sudo docker volume prune
-sudo docker-compose exec web python manage.py flush
+### ✨ [Demo](https://sit-messenger.com/)
 
-https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/
-For docker-compose the correct way to remove volumes would be docker-compose down --volumes or docker-compose down --rmi all --volumes
+## Installation and usage in production
+1. Clone repo
+2. Install docker-compose
+3. Build images
+  ```
+  docker-compose build
+  ```
+4. Run containers
+  ```
+  docker-compose up
+  ```
+5. application will be available on ports 80 (http) adn 443 (htpps)
 
-sudo docker-compose ps
-sudo docker container ls -a
-sudo docker container stop 2fe70c7c1839
-sudo docker container rm 2fe70c7c1839
-sudo docker system prune -a
-
-sudo docker volume ls
-
-**pg admin** <br>
-https://towardsdatascience.com/how-to-run-postgresql-and-pgadmin-using-docker-3a6a8ae918b5
-
-
-deployment on digital ocean:
-
-(local) git archive --format tar --output ./project.tar main
-(local) rsync ./project.tar root@$DIGITAL_OCEAN_IP_ADDRESS:/tmp/project.tar
-(ssh) rm -rf /app/* && tar -xf /tmp/project.tar -C /app
-(ssh) cd /app/
-(ssh) docker-compose -f /app/docker-compose.prod.yml build
-(ssh) docker-compose -f /app/docker-compose.prod.yml up
+## Installation and usage in production
+1-2 ame a in production
+3. Build images
+  ```
+  docker-compose -f docker-compose.dev.yml build
+  ```
+4. Run containers
+  ```
+  docker-compose -f docker-compose.dev.yml up
+  ```
+5. application will be available http://localhost:8000/
 
 
-sudo kill $(sudo lsof -t -i:80)
+## Application structure
 
-ssh user@server -o ServerAliveInterval=15
+Application component are packed inside docker-compose. Inside docker there are several linked services as separate
+containers:
 
+- #### nginx
+  A web server, used for the purpose of reverse proxy, load balancer (jointly with Gunicorn in "web" container, later in
+  the text), and parse HTTPS protocol (jointly with "certbot" container )
+- #### certbot
+  A software tool for automatically using Let’s Encrypt certificates on manually-administrated websites to enable HTTPS
+- #### web
+  The Main container with Django Rest Framework application. This container is collection of application organised to
+  manage encrypted data hosted in storage, data from a database, integrate applications n from other contenders and
+  finally parse Rest API as entry point
+- #### db
+  A Postgres relational database.
+- #### redis
+  An in-memory data structure store used to store cache
+- #### rabbitmq
+  A message-broker used by celery_worker container.
+- #### celery_worker
+  An asynchronous task and job queue. Celery worker mange caches by distributed message passing. Celery worker use "
+  redis" container ad storage and "rabbitmq" container as message-broker
+- #### celery_beat
+  A specific usage of celery to manage recurring job queue in given time intervals.
+- flower. A web based tool for monitoring and administrating Celery clusters.
+
+## Data encryption:
+
+- chats (which contain messages) are store as models.FileField where chats are stored as encrypted binary files and
+  database store location to file
+- everytime messages are saved to/read from storage, data is encrypted / decrypted by individual (for each chat).
+  Cryptography is held under Fernet protocol provided by Cryptography
+  framework [Cryptography Framework](https://cryptography.io/en/latest/fernet.html).
+- It is not completed in this version but there are complited snipets inside aplication to provide encryption by tokens
+  that base on, individual uudi created and stored on client side and salt created and stored on Django application.
+  Lack of implementation is caused by the limitation of "SIT Messenger Frontend" the JavaScript client of Rest
+  API [SIT Messenger Frontend](https://github.com/kamil1marczak/SIT-messenger-frontend)
+
+## Author
+
+👤 **Kamil Marczak**
+
+* Github: [@kamil1marczak](https://github.com/kamil1marczak)
+* LinkedIn: [@kamil-marczak-71765b48](https://linkedin.com/in/kamil-marczak-71765b48)
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
