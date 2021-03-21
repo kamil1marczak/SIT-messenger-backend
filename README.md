@@ -1,40 +1,64 @@
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/kamil1marczak/SIT-messenger-backend)
+![GitHub language count](https://img.shields.io/github/languages/count/kamil1marczak/SIT-messenger-backend)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/kamil1marczak/SIT-messenger-backend)
+![Website](https://img.shields.io/website?down_color=lightgrey&down_message=offline&up_color=blue&up_message=online&url=http%3A%2F%2Fsit-messenger.com%2F)
+[![Maintainability](https://api.codeclimate.com/v1/badges/f3575e4a26896cdc9720/maintainability)](https://codeclimate.com/github/kamil1marczak/SIT-messenger-backend/maintainability)
+![GitHub Release Date](https://img.shields.io/github/release-date/kamil1marczak/SIT-messenger-backend)
+[![CC-0 license](https://img.shields.io/badge/License-CC--0-blue.svg)](https://creativecommons.org/licenses/by-nd/4.0)
 
 
 ![alt text](sit-logo.png "Title" )
 
-# SIT messenger - backend
+<img alt="Python" src="https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white"/>
+<img alt="Django" src="https://img.shields.io/badge/django%20-%23092E20.svg?&style=for-the-badge&logo=django&logoColor=white"/>
+<img alt="Nginx" src="https://img.shields.io/badge/nginx%20-%23009639.svg?&style=for-the-badge&logo=nginx&logoColor=white"/>
+<img alt="Postgres" src ="https://img.shields.io/badge/postgres-%23316192.svg?&style=for-the-badge&logo=postgresql&logoColor=white"/>
+<img alt="Docker" src="https://img.shields.io/badge/docker%20-%230db7ed.svg?&style=for-the-badge&logo=docker&logoColor=white"/>
 
-> SIT Messenger is a fully encrypted chat application. SIT Messenger Frontend is Nuxt.js web client for backend Django Rest API service.
+# SIT Messenger Backend
+
+> SIT Messenger is a fully encrypted chat application. SIT Messenger Backed is Docker Compose application with Django Rest Framework. Api Client Application is SIT Messenger Frontend.
+
+#### Project is deployed on page http://sit-messenger.com/
 
 ### 🏠 [Homepage](https://sit-messenger.com/)
 
-### ✨ [Demo](https://sit-messenger.com/)
 
 ## Installation and usage in production
+
 1. Clone repo
 2. Install docker-compose
 3. Build images
+
   ```
   docker-compose build
   ```
+
 4. Run containers
+
   ```
   docker-compose up
   ```
+
 5. application will be available on ports 80 (http) adn 443 (htpps)
 
 ## Installation and usage in production
+
 1-2 ame a in production
+
 3. Build images
+
   ```
   docker-compose -f docker-compose.dev.yml build
   ```
+
 4. Run containers
+
   ```
   docker-compose -f docker-compose.dev.yml up
   ```
-5. application will be available http://localhost:8000/
 
+5. application will be available http://localhost:8000/
 
 ## Application structure
 
@@ -81,6 +105,8 @@ containers:
 
 * Github: [@kamil1marczak](https://github.com/kamil1marczak)
 * LinkedIn: [@kamil-marczak-71765b48](https://linkedin.com/in/kamil-marczak-71765b48)
+
+[![ForTheBadge built-with-swag](http://ForTheBadge.com/images/badges/built-with-swag.svg)](https://GitHub.com/Naereen/)
 
 ## Show your support
 
