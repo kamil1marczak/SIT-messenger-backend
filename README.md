@@ -5,7 +5,6 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/f3575e4a26896cdc9720/maintainability)](https://codeclimate.com/github/kamil1marczak/SIT-messenger-backend/maintainability)
 ![GitHub Release Date](https://img.shields.io/github/release-date/kamil1marczak/SIT-messenger-backend)
 
-
 ![alt text](sit-logo.png "Title" )
 
 <img alt="Python" src="https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white"/>
