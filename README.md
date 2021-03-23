@@ -42,7 +42,7 @@
 
 5. application will be available on ports 80 (http) adn 443 (htpps)
 
-## Installation and usage in production
+## Installation and usage in development
 
 1-2 ame a in production
 
