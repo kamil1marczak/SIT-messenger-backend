@@ -44,7 +44,7 @@
 
 ## Installation and usage in development
 
-1-2 ame a in production
+1-2 same as in production
 
 3. Build images
 
