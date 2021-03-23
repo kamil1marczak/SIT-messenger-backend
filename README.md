@@ -85,7 +85,9 @@ containers:
   redis" container ad storage and "rabbitmq" container as message-broker
 - #### celery_beat
   A specific usage of celery to manage recurring job queue in given time intervals.
-- flower. A web based tool for monitoring and administrating Celery clusters.
+- #### flower. 
+  A web based tool for monitoring and administrating Celery clusters.
+
 
 ## Data encryption:
 
@@ -106,7 +108,7 @@ containers:
 * Github: [@kamil1marczak](https://github.com/kamil1marczak)
 * LinkedIn: [@kamil-marczak-71765b48](https://linkedin.com/in/kamil-marczak-71765b48)
 
-[![ForTheBadge built-with-swag](http://ForTheBadge.com/images/badges/built-with-swag.svg)](https://GitHub.com/Naereen/)
+[![ForTheBadge built-with-swag](http://ForTheBadge.com/images/badges/built-with-swag.svg)](https://github.com/kamil1marczak/)
 
 ## Show your support
 
