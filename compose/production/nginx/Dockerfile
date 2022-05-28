@@ -1,4 +1,4 @@
-FROM nginx:alpine as production
+FROM nginx:1.22.0-alpine as production
 #WORKDIR /app
 
 RUN rm /etc/nginx/conf.d/default.conf
