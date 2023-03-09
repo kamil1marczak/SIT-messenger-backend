@@ -7,7 +7,7 @@
 #RUN npm run build
 
 # Python build stage
-FROM python:3.9.2-slim-buster
+FROM python:3.12.0a5-slim-buster
 
 ENV PYTHONUNBUFFERED 1
 
